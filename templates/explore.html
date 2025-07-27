@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic Challenges - Dare Community</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --background: hsl(220, 23%, 7%);
+            --foreground: hsl(210, 40%, 98%);
+            --card: hsl(222, 23%, 11%);
+            --card-foreground: hsl(210, 40%, 98%);
+            --primary: hsl(217, 91%, 60%);
+            --primary-foreground: hsl(222.2, 47.4%, 11.2%);
+            --secondary: hsl(222, 23%, 15%);
+            --secondary-foreground: hsl(210, 40%, 98%);
+            --muted: hsl(222, 23%, 15%);
+            --muted-foreground: hsl(215.4, 16.3%, 56.9%);
+            --border: hsl(222, 23%, 20%);
+            --radius: 0.75rem;
+            --orange: hsl(28, 100%, 56%);
+            --orange-dark: hsl(20, 65%, 25%);
+            --purple: hsl(271, 81%, 56%);
+            --purple-dark: hsl(271, 81%, 35%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.5;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1rem;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 2rem;
+            height: 2rem;
+            background-color: var(--primary);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-foreground);
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+
+        .nav {
+            display: none;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .nav {
+                display: flex;
+            }
+            .header {
+                padding: 0 1.5rem;
+            }
+        }
+
+        .nav a {
+            color: var(--foreground);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover, .nav a.active {
+            color: var(--primary);
+        }
+
+        .nav-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--foreground);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .nav-dropdown:hover {
+            color: var(--primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--foreground);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .notification-btn:hover {
+            color: var(--primary);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -0.125rem;
+            right: -0.125rem;
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: var(--primary);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 2rem;
+            height: 2rem;
+            background-color: var(--muted);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .welcome-text {
+            display: none;
+            font-size: 0.875rem;
+            color: var(--foreground);
+        }
+
+        @media (min-width: 640px) {
+            .welcome-text {
+                display: block;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding: 3rem 2rem;
+            }
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--foreground);
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 1024px) {
+            .page-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        .title-highlight {
+            color: var(--orange);
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--muted-foreground);
+            max-width: 40rem;
+            margin: 0 auto;
+        }
+
+        /* Featured Cards */
+        .featured-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .featured-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .featured-card {
+            padding: 2rem;
+            border-radius: var(--radius);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .trending-card {
+            background: linear-gradient(135deg, var(--orange-dark), var(--orange));
+        }
+
+        .create-card {
+            background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+        }
+
+        .card-icon {
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-action {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            width: fit-content;
+        }
+
+        .card-action:hover {
+            opacity: 0.8;
+        }
+
+        .trending-action {
+            background-color: var(--orange);
+            color: white;
+        }
+
+        .create-action {
+            background-color: var(--purple);
+            color: white;
+        }
+
+        /* Categories Grid */
+        .categories-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--foreground);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .category-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .category-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .adventure-icon { background-color: var(--primary); }
+        .fitness-icon { background-color: var(--purple); }
+        .creative-icon { background-color: #3b82f6; }
+        .social-icon { background-color: var(--primary); }
+        .skill-icon { background-color: #10b981; }
+        .funny-icon { background-color: #f59e0b; }
+
+        .category-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+        }
+
+        .category-count {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Icons */
+        .icon {
+            width: 1rem;
+            height: 1rem;
+            fill: currentColor;
+        }
+
+        .icon-lg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="#" class="logo">
+                <div class="logo-icon">D</div>
+            </a>
+                        <nav class="nav">
+                <a href="#">Home</a>
+                <a href="{% url 'postdare' %}" onclick="goToPage('post-dare')">Post Dare</a>
+                <a href="{% url 'profile' %}" onclick="goToPage('profile')">Profile</a>
+                <a href="{% url 'explore' %}">Challenges</a>
+                <a href="{% url 'community' %}">Community</a>
+                <a href="{% url 'leaderboard' %}">Leaderboard</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <button class="notification-btn">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                </svg>
+                <span class="notification-dot"></span>
+            </button>
+            <div class="user-profile">
+                <div class="user-avatar">👤</div>
+                <span class="welcome-text">Welcome back!</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Epic <span class="title-highlight">Challenges</span></h1>
+                <p class="page-subtitle">Discover trending challenges and create your own to inspire the community</p>
+            </div>
+
+            <!-- Featured Cards -->
+            <div class="featured-cards">
+                <div class="featured-card trending-card" onclick="viewTrending()">
+                    <div>
+                        <div class="card-icon">🔥</div>
+                        <h2 class="card-title">Trending Now</h2>
+                        <p class="card-description">Join the hottest challenges that are taking the community by storm</p>
+                    </div>
+                    <button class="card-action trending-action">View Trending</button>
+                </div>
+                
+                <div class="featured-card create-card" onclick="createChallenge()">
+                    <div>
+                        <div class="card-icon">➕</div>
+                        <h2 class="card-title">Create Challenge</h2>
+                        <p class="card-description">Design your own unique challenge and watch it spread across the network</p>
+                    </div>
+                    <button class="card-action create-action">Start Creating</button>
+                </div>
+            </div>
+
+            <!-- Categories Section -->
+            <h2 class="categories-title">Browse by Category</h2>
+            <div class="categories-grid">
+                <div class="category-card" onclick="browseCategory('adventure')">
+                    <div class="category-icon adventure-icon">A</div>
+                    <h3 class="category-name">Adventure</h3>
+                    <p class="category-count">512 challenges</p>
+                </div>
+                
+                <div class="category-card" onclick="browseCategory('fitness')">
+                    <div class="category-icon fitness-icon">F</div>
+                    <h3 class="category-name">Fitness</h3>
+                    <p class="category-count">770 challenges</p>
+                </div>
+                
+                <div class="category-card" onclick="browseCategory('creative')">
+                    <div class="category-icon creative-icon">C</div>
+                    <h3 class="category-name">Creative</h3>
+                    <p class="category-count">973 challenges</p>
+                </div>
+                
+                <div class="category-card" onclick="browseCategory('social')">
+                    <div class="category-icon social-icon">S</div>
+                    <h3 class="category-name">Social</h3>
+                    <p class="category-count">643 challenges</p>
+                </div>
+                
+                <div class="category-card" onclick="browseCategory('skill')">
+                    <div class="category-icon skill-icon">S</div>
+                    <h3 class="category-name">Skill</h3>
+                    <p class="category-count">333 challenges</p>
+                </div>
+                
+                <div class="category-card" onclick="browseCategory('funny')">
+                    <div class="category-icon funny-icon">F</div>
+                    <h3 class="category-name">Funny</h3>
+                    <p class="category-count">650 challenges</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function viewTrending() {
+            alert('Viewing trending challenges... (Demo)');
+        }
+
+        function createChallenge() {
+            alert('Opening challenge creator... (Demo)');
+        }
+
+        function browseCategory(category) {
+            alert(`Browsing ${category} challenges... (Demo)`);
+        }
+
+        // Add click handlers for interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth hover effects
+            const cards = document.querySelectorAll('.featured-card, .category-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
