@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block body %}
+<style>
+    .accept-dare-container {
+        max-width: 500px;
+        margin: 2rem auto;
+        background: rgba(34, 39, 46, 0.95);
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        color: var(--foreground);
+    }
+    .accept-dare-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: var(--primary);
+    }
+    .accept-dare-label {
+        font-weight: 500;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    .accept-dare-input, .accept-dare-textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        background: var(--secondary);
+        color: var(--foreground);
+        margin-bottom: 1rem;
+    }
+    .accept-dare-btn {
+        background: var(--primary);
+        color: var(--primary-foreground);
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .accept-dare-btn:hover {
+        opacity: 0.9;
+    }
+</style>
+<div class="accept-dare-container">
+    <div class="accept-dare-title">Accept Dare: {{ dare.dare_title }}</div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label class="accept-dare-label">Your Completion Notes</label>
+        <textarea name="completion_notes" class="accept-dare-textarea" rows="4" placeholder="Describe how you completed the dare..." required></textarea>
+        <label class="accept-dare-label">Upload Proof (Image/Video)</label>
+        <input type="file" name="proof_file" class="accept-dare-input" accept="image/*,video/*" required>
+        <button type="submit" class="accept-dare-btn">Submit Completion</button>
+    </form>
+</div>
+{% endblock %}

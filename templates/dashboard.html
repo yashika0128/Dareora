@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Dashboard - Dare Community</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --background: hsl(220, 23%, 7%);
+            --foreground: hsl(210, 40%, 98%);
+            --card: hsl(222, 23%, 11%);
+            --card-foreground: hsl(210, 40%, 98%);
+            --primary: hsl(217, 91%, 60%);
+            --primary-foreground: hsl(222.2, 47.4%, 11.2%);
+            --secondary: hsl(222, 23%, 15%);
+            --secondary-foreground: hsl(210, 40%, 98%);
+            --muted: hsl(222, 23%, 15%);
+            --muted-foreground: hsl(215.4, 16.3%, 56.9%);
+            --border: hsl(222, 23%, 20%);
+            --radius: 0.75rem;
+            --orange: hsl(28, 100%, 56%);
+            --green: hsl(142, 71%, 45%);
+            --yellow: hsl(48, 96%, 53%);
+            --red: hsl(0, 72%, 51%);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.5;
+        }
+        
+        .header {
+            background-color: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1rem;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            padding: 0.5rem 0.75rem;
+            background: linear-gradient(135deg, var(--primary), hsl(217, 91%, 75%));
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-foreground);
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav {
+            display: none;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .nav {
+                display: flex;
+            }
+            .header {
+                padding: 0 1.5rem;
+            }
+        }
+
+        .nav a {
+            color: var(--foreground);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover, .nav a.active {
+            color: var(--primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--foreground);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .notification-btn:hover {
+            color: var(--primary);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -0.125rem;
+            right: -0.125rem;
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: var(--primary);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 2rem;
+            height: 2rem;
+            background-color: var(--muted);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .welcome-text {
+            display: none;
+            font-size: 0.875rem;
+            color: var(--foreground);
+        }
+
+        @media (min-width: 640px) {
+            .welcome-text {
+                display: block;
+            }
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr 320px;
+                padding: 2rem;
+            }
+        }
+
+        .dashboard-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .dashboard-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+        }
+
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--foreground);
+            margin-bottom: 0.25rem;
+        }
+
+        .dashboard-subtitle {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .stat-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .stat-icon.orange { background-color: var(--orange); color: white; }
+        .stat-icon.purple { background-color: var(--primary); color: white; }
+        .stat-icon.blue { background-color: #3b82f6; color: white; }
+        .stat-icon.yellow { background-color: var(--yellow); color: black; }
+        .stat-icon.green { background-color: var(--green); color: white; }
+        .stat-icon.red { background-color: var(--red); color: white; }
+
+        .stat-value {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: var(--foreground);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .stat-trend {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            color: var(--green);
+        }
+
+        .achievements-section {
+            margin-bottom: 2rem;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .achievements-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .achievement-card {
+            background-color: var(--secondary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .achievement-icon {
+            font-size: 1.5rem;
+        }
+
+        .achievement-text {
+            flex: 1;
+        }
+
+        .achievement-name {
+            font-weight: 500;
+            color: var(--foreground);
+            font-size: 0.875rem;
+        }
+
+        .achievement-desc {
+            color: var(--muted-foreground);
+            font-size: 0.75rem;
+        }
+
+        .feed-tabs {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 0.75rem 0;
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: var(--foreground);
+            border-bottom-color: var(--primary);
+        }
+
+        .feed-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-left: auto;
+        }
+
+        .search-input {
+            background-color: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            color: var(--foreground);
+            font-size: 0.875rem;
+            width: 200px;
+        }
+
+        .search-input::placeholder {
+            color: var(--muted-foreground);
+        }
+
+        .filter-select {
+            background-color: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            color: var(--foreground);
+            font-size: 0.875rem;
+        }
+
+        .challenge-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .challenge-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .challenge-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .challenge-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .challenge-user {
+            flex: 1;
+        }
+
+        .challenge-username {
+            font-weight: 600;
+            color: var(--foreground);
+            font-size: 0.875rem;
+        }
+
+        .challenge-time {
+            color: var(--muted-foreground);
+            font-size: 0.75rem;
+        }
+
+        .challenge-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .challenge-tag {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .tag-trending { background-color: var(--orange); color: white; }
+        .tag-medium { background-color: var(--yellow); color: black; }
+        .tag-hard { background-color: #ef4444; color: white; }
+        .tag-easy { background-color: var(--green); color: white; }
+
+        .challenge-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 0.75rem;
+        }
+
+        .challenge-description {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .challenge-stats {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        .challenge-action {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+
+        .challenge-action:hover {
+            opacity: 0.9;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-section {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .connection-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .connection-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .connection-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .connection-name {
+            font-weight: 500;
+            color: var(--foreground);
+            font-size: 0.875rem;
+        }
+
+        .connection-followers {
+            color: var(--muted-foreground);
+            font-size: 0.75rem;
+        }
+
+        .connection-btn {
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-follow {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-following {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+        }
+
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background-color: var(--secondary);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .quick-action:hover {
+            opacity: 0.8;
+        }
+
+        .quick-action:last-child {
+            margin-bottom: 0;
+        }
+
+        .quick-action-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.375rem;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+
+        .quick-action-text {
+            color: var(--foreground);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .category-tag {
+            padding: 0.375rem 0.75rem;
+            background-color: var(--secondary);
+            border-radius: 0.375rem;
+            color: var(--foreground);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .category-tag:hover {
+            opacity: 0.8;
+        }
+
+        .user-welcome {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--muted-foreground);
+        }
+        
+        .empty-state h3 {
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+        }
+        
+        .category-count {
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            margin-left: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: var(--secondary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .metric-card {
+            background-color: var(--secondary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="{% url 'home' %}" class="logo">
+                <div class="logo-icon">Dareora</div>
+            </a>
+           <nav class="nav">
+                
+                <a href="{% url 'postdare' %}" >Post Dare</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'explore' %}">Challenges</a>
+                <a href="{% url 'community' %}">Community</a>
+                <a href="{% url 'leaderboard' %}">Leaderboard</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <button class="notification-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                </svg>
+                <span class="notification-dot"></span>
+            </button>
+            <div class="user-profile">
+                <div class="user-avatar">{{ user.username|first|upper }}</div>
+                <span class="welcome-text user-welcome">Welcome, {{ user.username }}!</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Main Content -->
+        <main>
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div>
+                    <h1 class="dashboard-title">Your Dashboard</h1>
+                    <p class="dashboard-subtitle">Track your progress and discover new challenges • {{ user_engagement.engagement_score }}% engagement</p>
+                </div>
+                <div class="dashboard-actions">
+                    <a href="{% url 'postdare' %}" class="action-btn btn-primary">
+                        ➕ Create Dare
+                    </a>
+                    <a href="{% url 'explore' %}" class="action-btn btn-secondary">
+                        🌍 Explore
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon orange">🎯</div>
+                    <svg class="stat-trend" viewBox="0 0 24 24">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                    <div class="stat-value">{{ active_dares }}</div>
+                    <div class="stat-label">Active Dares</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon green">✅</div>
+                    <svg class="stat-trend" viewBox="0 0 24 24">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                    <div class="stat-value">{{ expired_dares }}</div>
+                    <div class="stat-label">Expired Dares</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon blue">👥</div>
+                    <svg class="stat-trend" viewBox="0 0 24 24">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                    <div class="stat-value">{{ stats.followers }}</div>
+                    <div class="stat-label">Community Reach</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon yellow">📈</div>
+                    <svg class="stat-trend" viewBox="0 0 24 24">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                    <div class="stat-value">+{{ growth_percentage }}%</div>
+                    <div class="stat-label">Growth Rate</div>
+                </div>
+            </div>
+
+            <!-- Achievements Section -->
+            {% if achievements %}
+            <div class="achievements-section">
+                <div class="achievements-title">
+                    🏆 Your Achievements
+                </div>
+                <div class="achievements-grid">
+                    {% for achievement in achievements %}
+                    <div class="achievement-card">
+                        <div class="achievement-icon">{{ achievement.icon }}</div>
+                        <div class="achievement-text">
+                            <div class="achievement-name">{{ achievement.name }}</div>
+                            <div class="achievement-desc">{{ achievement.desc }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Category Insights -->
+            <div class="sidebar-section" style="margin-bottom: 2rem;">
+                <div class="sidebar-title">📊 Category Performance</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                    {% for insight in category_insights %}
+                    <div class="metric-card">
+                        <div class="metric-value">{{ insight.count }}</div>
+                        <div class="metric-label">{{ insight.name|title }}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ insight.percentage }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Feed Tabs -->
+            <div class="feed-tabs">
+                <div class="tab active" data-tab="trending">🔥 Trending</div>
+                <div class="tab" data-tab="recent">⏰ Recent</div>
+                <div class="tab" data-tab="categories">📂 Categories</div>
+                <div class="feed-controls">
+                    <input type="text" class="search-input" placeholder="Search dares..." id="searchInput">
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        {% for category in categories_stats %}
+                        <option value="{{ category.category }}">{{ category.category|title }} ({{ category.count }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Challenge Feed -->
+            <div class="challenge-feed" id="challengeFeed">
+                {% if trending_dares %}
+                    {% for dare in trending_dares %}
+                    <div class="challenge-card" data-category="{{ dare.category }}" data-difficulty="{{ dare.difficulty }}">
+                        <div class="challenge-header">
+                            <div class="challenge-avatar">{{ user.username|first|upper }}</div>
+                            <div class="challenge-user">
+                                <div class="challenge-username">{{ user.username|title }}</div>
+                                <div class="challenge-time">{{ forloop.counter }} day{{ forloop.counter|pluralize }} ago</div>
+                            </div>
+                            <div class="challenge-tags">
+                                <span class="challenge-tag tag-trending">🔥 Hot</span>
+                                <span class="challenge-tag {% if dare.difficulty == 'Easy' %}tag-easy{% elif dare.difficulty == 'Hard' %}tag-hard{% else %}tag-medium{% endif %}">
+                                    {{ dare.difficulty }}
+                                </span>
+                            </div>
+                        </div>
+                        <h3 class="challenge-title">{{ dare.dare_title }}</h3>
+                        <p class="challenge-description">{{ dare.description|truncatechars:150 }}</p>
+                        
+                        <!-- Dare Details -->
+                        <div style="background-color: var(--secondary); padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; text-align: center;">
+                                <div>
+                                    <div style="font-weight: bold; color: var(--primary);">{{ dare.category|title }}</div>
+                                    <div style="font-size: 0.75rem; color: var(--muted-foreground);">Category</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold; color: var(--orange);">{{ dare.difficulty }}</div>
+                                    <div style="font-size: 0.75rem; color: var(--muted-foreground);">Difficulty</div>
+                                </div>
+                                {% if dare.time_limit %}
+                                <div>
+                                    <div style="font-weight: bold; color: var(--yellow);">Active</div>
+                                    <div style="font-size: 0.75rem; color: var(--muted-foreground);">Status</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="challenge-stats">
+                            <div class="stat-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5Z"/>
+                                </svg>
+                                <span>{{ dare.id|add:"85" }}</span>
+                            </div>
+                            <div class="stat-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>
+                                </svg>
+                                <span>{{ dare.id|add:"12" }}</span>
+                            </div>
+                            <div class="stat-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7 10v12l5-3 5 3V10"/>
+                                    <path d="M5 6h14l-1 4H6z"/>
+                                </svg>
+                                <span>{{ dare.id|add:"35" }}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <a href="{% url 'accept_dare' dare.id %}" class="challenge-action">🎯 Accept Dare</a>
+                            <a href="{% url 'edit_dare' dare.id %}" class="action-btn btn-secondary">✏️ Edit</a>
+                            <a href="{% url 'delete_dare' dare.id %}" class="action-btn" style="background-color: var(--red); color: white;" onclick="return confirm('Are you sure you want to delete this dare?')">🗑️ Delete</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <h3>No Dares Found</h3>
+                        <p>Start by creating your first dare to build an amazing community!</p>
+                        <a href="{% url 'postdare' %}" class="action-btn btn-primary" style="margin-top: 1rem; display: inline-flex;">
+                            ➕ Create First Dare
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Recent Activities -->
+            {% if recent_activities %}
+            <div class="sidebar-section" style="margin-top: 2rem;">
+                <div class="sidebar-title">⚡ Recent Activity</div>
+                {% for activity in recent_activities %}
+                <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+                    <div style="font-size: 1.5rem;">{{ activity.icon }}</div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 0.875rem; color: var(--foreground);">{{ activity.title }}</div>
+                        <div style="font-size: 0.75rem; color: var(--muted-foreground);">{{ activity.category|title }} • {{ activity.time }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Enhanced Quick Stats -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">📊 Performance Metrics</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">{{ total_dares }}</div>
+                        <div class="metric-label">Total Dares</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">{{ categories_stats|length }}</div>
+                        <div class="metric-label">Categories</div>
+                    </div>
+                </div>
+                
+                <!-- Engagement Metrics -->
+                <div style="background-color: var(--secondary); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.875rem; color: var(--foreground);">Engagement Score</span>
+                        <span style="font-weight: bold; color: var(--primary);">{{ user_engagement.engagement_score }}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ user_engagement.engagement_score }}%"></div>
+                    </div>
+                </div>
+
+                <!-- Completion Rate -->
+                <div style="background-color: var(--secondary); padding: 1rem; border-radius: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.875rem; color: var(--foreground);">Completion Rate</span>
+                        <span style="font-weight: bold; color: var(--green);">{{ user_engagement.completion_rate|floatformat:1 }}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ user_engagement.completion_rate }}%; background-color: var(--green);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Categories -->
+            {% if top_categories %}
+            <div class="sidebar-section">
+                <div class="sidebar-title">🏆 Top Categories</div>
+                {% for category in top_categories %}
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                    <span style="color: var(--foreground); font-weight: 500;">{{ category.category|title }}</span>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--muted-foreground); font-size: 0.875rem;">{{ category.count }}</span>
+                        <div style="width: 50px; height: 4px; background-color: var(--secondary); border-radius: 2px;">
+                            <div style="width: {{ category.percentage|default:50 }}%; height: 100%; background-color: var(--primary); border-radius: 2px;"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Suggested Connections -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">👥 Suggested Connections</div>
+                {% for connection in suggested_connections %}
+                <div class="connection-item">
+                    <div class="connection-avatar">{{ connection.avatar }}</div>
+                    <div class="connection-info">
+                        <div class="connection-name">{{ connection.name }}</div>
+                        <div class="connection-followers">{{ connection.followers }} followers • {{ connection.bio }}</div>
+                        <div style="font-size: 0.7rem; color: var(--primary); margin-top: 0.25rem;">
+                            Interested in {{ connection.mutual_interests }}
+                        </div>
+                    </div>
+                    <button class="connection-btn {% if connection.following %}btn-following{% else %}btn-follow{% endif %}" onclick="toggleFollow(this)">
+                        {% if connection.following %}Following{% else %}Follow{% endif %}
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">⚡ Quick Actions</div>
+                <a href="{% url 'postdare' %}" class="quick-action">
+                    <div class="quick-action-icon">➕</div>
+                    <div class="quick-action-text">Create New Dare</div>
+                </a>
+                <a href="{% url 'explore' %}" class="quick-action">
+                    <div class="quick-action-icon">🌍</div>
+                    <div class="quick-action-text">Explore Global</div>
+                </a>
+                <div class="quick-action" onclick="viewDetailedStats()">
+                    <div class="quick-action-icon">📊</div>
+                    <div class="quick-action-text">View Analytics</div>
+                </div>
+                <div class="quick-action" onclick="exportData()">
+                    <div class="quick-action-icon">📁</div>
+                    <div class="quick-action-text">Export Data</div>
+                </div>
+            </div>
+
+            <!-- Popular Categories -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">🔥 Trending Categories</div>
+                <div class="category-tags">
+                    {% for category in popular_categories %}
+                    <div class="category-tag" onclick="filterByCategory('{{ category.category }}')">
+                        {{ category.category|title }}
+                        <span class="category-count">{{ category.count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- System Info -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">ℹ️ System Info</div>
+                <div style="font-size: 0.75rem; color: var(--muted-foreground); line-height: 1.4;">
+                    <div>📈 Growth: <strong style="color: var(--green);" data-system-growth>+{{ growth_percentage }}%</strong></div>
+                    <div>📝 Avg Description: <strong data-avg-desc>{{ avg_description_length }} chars</strong></div>
+                    <div>🎯 Active/Total: <strong data-active-total>{{ active_dares }}/{{ total_dares }}</strong></div>
+                    <div>⭐ User Rating: <strong style="color: var(--yellow);" data-user-rating>{{ user_engagement.avg_rating }}/5.0</strong></div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const tabType = this.dataset.tab;
+                filterChallenges(tabType);
+            });
+        });
+
+        // Enhanced search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.challenge-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.challenge-title').textContent.toLowerCase();
+                const description = card.querySelector('.challenge-description').textContent.toLowerCase();
+                const category = card.dataset.category.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm) || category.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Update search results info
+            updateSearchInfo(visibleCount, cards.length);
+        });
+
+        // Category filter functionality
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const cards = document.querySelectorAll('.challenge-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const cardCategory = card.dataset.category;
+                
+                if (!selectedCategory || cardCategory === selectedCategory) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            updateSearchInfo(visibleCount, cards.length);
+        });
+
+        // Update search info
+        function updateSearchInfo(visible, total) {
+            const feedTabs = document.querySelector('.feed-tabs');
+            let infoElement = document.getElementById('searchInfo');
+            
+            if (!infoElement) {
+                infoElement = document.createElement('div');
+                infoElement.id = 'searchInfo';
+                infoElement.style.cssText = 'font-size: 0.875rem; color: var(--muted-foreground); margin-left: 1rem;';
+                feedTabs.appendChild(infoElement);
+            }
+            
+            if (visible !== total) {
+                infoElement.textContent = `Showing ${visible} of ${total} dares`;
+            } else {
+                infoElement.textContent = '';
+            }
+        }
+
+        // Filter by category from sidebar
+        function filterByCategory(category) {
+            document.getElementById('categoryFilter').value = category;
+            document.getElementById('categoryFilter').dispatchEvent(new Event('change'));
+            
+            // Scroll to feed
+            document.getElementById('challengeFeed').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Filter challenges by tab
+        function filterChallenges(type) {
+            const cards = document.querySelectorAll('.challenge-card');
+            
+            switch(type) {
+                case 'trending':
+                    // Show all cards for trending
+                    cards.forEach(card => card.style.display = 'block');
+                    break;
+                case 'recent':
+                    // Could implement date-based filtering
+                    cards.forEach(card => card.style.display = 'block');
+                    break;
+                case 'categories':
+                    // Group by categories
+                    cards.forEach(card => card.style.display = 'block');
+                    break;
+            }
+        }
+
+        // Follow button toggling
+        function toggleFollow(btn) {
+            if (btn.classList.contains('btn-follow')) {
+                btn.classList.remove('btn-follow');
+                btn.classList.add('btn-following');
+                btn.textContent = 'Following';
+                showNotification('✅ Now following!');
+            } else {
+                btn.classList.remove('btn-following');
+                btn.classList.add('btn-follow');
+                btn.textContent = 'Follow';
+                showNotification('👋 Unfollowed');
+            }
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: var(--primary);
+                color: white;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                z-index: 1000;
+                font-size: 0.875rem;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // View detailed statistics
+        function viewDetailedStats() {
+            const statsModal = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center;" onclick="this.remove()">
+                    <div style="background: var(--card); padding: 2rem; border-radius: 1rem; max-width: 500px; width: 90%;" onclick="event.stopPropagation()">
+                        <h3 style="color: var(--foreground); margin-bottom: 1rem;">📊 Detailed Analytics</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div style="text-align: center; padding: 1rem; background: var(--secondary); border-radius: 0.5rem;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);" data-total-dares>{{ total_dares }}</div>
+                                <div style="font-size: 0.875rem; color: var(--muted-foreground);">Total Dares</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem; background: var(--secondary); border-radius: 0.5rem;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--orange);" data-active-dares>{{ active_dares }}</div>
+                                <div style="font-size: 0.875rem; color: var(--muted-foreground);">Active Dares</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem; background: var(--secondary); border-radius: 0.5rem;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--green);" data-categories-count>{{ categories_stats|length }}</div>
+                                <div style="font-size: 0.875rem; color: var(--muted-foreground);">Categories</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem; background: var(--secondary); border-radius: 0.5rem;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--yellow);" data-growth-rate>{{ growth_percentage }}%</div>
+                                <div style="font-size: 0.875rem; color: var(--muted-foreground);">Growth Rate</div>
+                            </div>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.remove()" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 0.5rem; cursor: pointer;">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', statsModal);
+        }
+
+        // Export data functionality
+        function exportData() {
+            // Get dynamic values from DOM
+            const totalDares = document.querySelector('[data-total-dares]').textContent;
+            const activeDares = document.querySelector('[data-active-dares]').textContent;
+            const categoriesCount = document.querySelector('[data-categories-count]').textContent;
+            const growthRate = document.querySelector('[data-growth-rate]').textContent.replace('%', '');
+            
+            const data = {
+                totalDares: parseInt(totalDares),
+                activeDares: parseInt(activeDares),
+                categories: parseInt(categoriesCount),
+                growthRate: parseFloat(growthRate),
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dashboard-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('📁 Data exported successfully!');
+        }
+
+        // Add CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Animation on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.challenge-card, .stat-card, .sidebar-section');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+
+            // Progressive progress bar animation
+            setTimeout(() => {
+                document.querySelectorAll('.progress-fill').forEach(bar => {
+                    bar.style.transition = 'width 1s ease';
+                });
+            }, 1000);
+        });
+
+        // Auto-refresh data every 5 minutes
+        setInterval(() => {
+            console.log('Auto-refreshing dashboard data...');
+            // In a real app, you'd make an AJAX call here
+        }, 300000);
+    </script>
+</body>
+</html>

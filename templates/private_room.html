@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% block body %}
+<style>
+    .private-room-banner {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 1rem 1rem 0 0;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    }
+    .private-room-header {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+    .private-room-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: white;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .private-room-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary);
+        margin-bottom: 0.2rem;
+    }
+    .private-room-meta {
+        color: var(--muted-foreground);
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    .private-room-link {
+        background: var(--secondary);
+        color: var(--primary);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        word-break: break-all;
+        margin-bottom: 1rem;
+        display: inline-block;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .private-room-members {
+        margin-bottom: 1.5rem;
+    }
+    .private-room-members-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin-top: 0.5rem;
+    }
+    .private-room-member-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: var(--primary);
+        font-weight: 600;
+        border: 2px solid var(--primary);
+    }
+    .private-room-section {
+        margin-bottom: 2rem;
+    }
+    .private-room-dares {
+        margin-top: 2rem;
+    }
+    .private-room-dare-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        position: relative;
+        overflow: hidden;
+    }
+    .private-room-dare-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .private-room-dare-meta {
+        color: var(--muted-foreground);
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+    .private-room-dare-desc {
+        color: var(--foreground);
+        margin-bottom: 0.5rem;
+    }
+    .private-room-dare-icon {
+        font-size: 1.2rem;
+        margin-right: 0.3rem;
+    }
+    .private-room-empty {
+        color: var(--muted-foreground);
+        text-align: center;
+        margin: 2rem 0;
+    }
+    .private-room-container {
+        max-width: 700px;
+        margin: 2rem auto;
+        background: rgba(34, 39, 46, 0.97);
+        border-radius: 1rem;
+        padding: 2rem 2.5rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        color: var(--foreground);
+    }
+    .private-room-title {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: var(--primary);
+    }
+    .private-room-section {
+        margin-bottom: 2rem;
+    }
+    .private-room-members {
+        margin-bottom: 1.5rem;
+    }
+    .private-room-link {
+        background: var(--secondary);
+        color: var(--primary);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        word-break: break-all;
+        margin-bottom: 1rem;
+        display: inline-block;
+    }
+    .private-room-dares {
+        margin-top: 2rem;
+    }
+    .private-room-dare-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+    .private-room-dare-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+    .private-room-dare-meta {
+        color: var(--muted-foreground);
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+    .private-room-dare-desc {
+        color: var(--foreground);
+        margin-bottom: 0.5rem;
+    }
+</style>
+<div class="private-room-container">
+    <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=900&q=80" alt="Room Banner" class="private-room-banner">
+    <div class="private-room-header">
+        <div class="private-room-avatar">
+            <span>👥</span>
+        </div>
+        <div>
+            <div class="private-room-title">{{ room.name }}</div>
+            <div class="private-room-meta">Created by <b>{{ room.created_by.username }}</b> • {{ room.created_at|date:"M d, Y H:i" }}</div>
+        </div>
+    </div>
+    <div class="private-room-section">
+        <strong>Room Link:</strong>
+        <div class="private-room-link">{{ room_link }}</div>
+        <div class="private-room-members">
+            <strong>Members:</strong>
+            <div class="private-room-members-list">
+                {% for member in room.members.all %}
+                <div class="private-room-member-avatar" title="{{ member.username }}">{{ member.username|slice:":2"|upper }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="private-room-section">
+        <div class="form-container" style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-bottom: 2rem;">
+            <form method="post" enctype="multipart/form-data" id="dareForm">
+                {% csrf_token %}
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="dare_title" class="form-label" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--foreground);">Dare Title *</label>
+                    <input type="text" id="dare_title" name="dare_title" class="form-input" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; background-color: var(--background); color: var(--foreground); font-size: 1rem;" placeholder="Enter an exciting dare title" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="dare_description" class="form-label" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--foreground);">Description *</label>
+                    <textarea id="dare_description" name="dare_description" class="form-textarea" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; background-color: var(--background); color: var(--foreground); font-size: 1rem; min-height: 120px; resize: vertical;" placeholder="Describe your dare in detail..." required></textarea>
+                </div>
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem; border: none; border-radius: 0.5rem; font-weight: 600; font-size: 1rem; cursor: pointer; background-color: var(--primary); color: white;">Post Dare</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="private-room-dares">
+        <h3 style="margin-bottom:1rem;">Dares in this Room</h3>
+        {% for dare in room.dares.all %}
+        <div class="private-room-dare-card">
+            <div class="private-room-dare-title"><span class="private-room-dare-icon">🎯</span>{{ dare.title }}</div>
+            <div class="private-room-dare-meta">Posted by <b>{{ dare.created_by.username }}</b> on {{ dare.created_at|date:"M d, Y H:i" }}</div>
+            <div class="private-room-dare-desc">{{ dare.description }}</div>
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <a href="{% url 'edit_private_room_dare' room.uuid dare.id %}" class="btn btn-secondary" style="background-color: var(--border); color: var(--foreground); padding: 0.5rem 1.2rem; border-radius: 0.4rem; font-size: 0.95rem; text-decoration: none;">Edit</a>
+                <a href="{% url 'delete_private_room_dare' room.uuid dare.id %}" class="btn btn-secondary" style="background-color: #ef4444; color: white; padding: 0.5rem 1.2rem; border-radius: 0.4rem; font-size: 0.95rem; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this dare?');">Delete</a>
+                <a href="{% url 'accept_private_room_dare' room.uuid dare.id %}" class="btn btn-primary" style="background-color: var(--primary); color: white; padding: 0.5rem 1.2rem; border-radius: 0.4rem; font-size: 0.95rem; text-decoration: none;">Accept</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="private-room-empty">No dares posted yet. Be the first to post a challenge for your group!</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

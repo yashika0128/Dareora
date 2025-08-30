@@ -1,30 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Our Community - Dare Community</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% extends "base.html" %}
 
+{% block body %}
+<style>
+        /* Community specific styles */
         :root {
-            --background: hsl(220, 23%, 7%);
-            --foreground: hsl(210, 40%, 98%);
-            --card: hsl(222, 23%, 11%);
-            --card-foreground: hsl(210, 40%, 98%);
-            --primary: hsl(217, 91%, 60%);
-            --primary-foreground: hsl(222.2, 47.4%, 11.2%);
-            --secondary: hsl(222, 23%, 15%);
-            --secondary-foreground: hsl(210, 40%, 98%);
-            --muted: hsl(222, 23%, 15%);
-            --muted-foreground: hsl(215.4, 16.3%, 56.9%);
-            --border: hsl(222, 23%, 20%);
-            --radius: 0.75rem;
-            --pink: hsl(330, 81%, 60%);
             --green: hsl(142, 71%, 45%);
             --red: hsl(0, 84%, 60%);
         }
@@ -650,38 +629,9 @@
             fill: currentColor;
         }
     </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-left">
-            <a href="#" class="logo">
-                <div class="logo-icon">D</div>
-            </a>
-                       <nav class="nav">
-                <a href="#">Home</a>
-                <a href="{% url 'postdare' %}" onclick="goToPage('post-dare')">Post Dare</a>
-                <a href="{% url 'profile' %}" onclick="goToPage('profile')">Profile</a>
-                <a href="{% url 'explore' %}">Challenges</a>
-                <a href="{% url 'community' %}">Community</a>
-                <a href="{% url 'leaderboard' %}">Leaderboard</a>
-            </nav>
-        </div>
-        <div class="header-right">
-            <button class="notification-btn">
-                <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
-                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-                </svg>
-                <span class="notification-dot"></span>
-            </button>
-            <div class="user-profile">
-                <div class="user-avatar">👤</div>
-                <span class="welcome-text">Welcome back!</span>
-            </div>
-        </div>
-    </header>
 
+
+    
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
@@ -916,4 +866,4 @@
         });
     </script>
 </body>
-</html>
+{% endblock %}

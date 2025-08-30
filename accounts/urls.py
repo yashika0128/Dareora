@@ -3,4 +3,6 @@ from accounts import views
 urlpatterns = [
     path('', views.signup,name="register"),
     path('login/',  include("login.urls")),
+    path('dashboard/',  include("dashboard.urls")),
+
 ]

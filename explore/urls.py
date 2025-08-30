@@ -1,6 +1,7 @@
 from django.urls import path
-from explore import views
+from . import views
 
 urlpatterns = [
-    path("",views.explore,name="explore")
+    path("", views.explore, name="explore"),
+    path("category/<slug:category_slug>/", views.category_dares, name="category_dares"),
 ]

@@ -11,6 +11,7 @@ urlpatterns = [
     path("user_profile/",include("userprofile.urls")),
     path("postdare/",include("postdare.urls")),
     path("accounts/",include("accounts.urls")),
-    path('login/', include('login.urls')), # Login and logout ke liye 
+    path('login/', include('login.urls')), # Login and logout ke liye
+    path("dashboard/",include('dashboard.urls')) 
 
 ]

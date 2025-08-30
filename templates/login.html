@@ -1,23 +1,540 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Back - One Community</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+{% extends "base.html" %}
+
+{% block body %}
+<style>
+        /* Login specific styles */
+        .main-content {
+            position: relative;
+            min-height: calc(100vh - 4rem);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
         }
 
-        :root {
-            --background: hsl(220, 23%, 7%);
-            --foreground: hsl(210, 40%, 98%);
-            --card: hsl(222, 23%, 11%);
-            --card-foreground: hsl(210, 40%, 98%);
-            --primary: hsl(217, 91%, 60%);
-            --primary-foreground: hsl(222.2, 47.4%, 11.2%);
+        /* Background Effects */
+        .bg-gradient-1 {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            opacity: 0.5;
+        }
+
+        .bg-gradient-2 {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), 
+                        radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            opacity: 0.3;
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .floating-elements {
+                display: block;
+            }
+        }
+
+        .floating-item {
+            position: absolute;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--foreground);
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-item:nth-child(1) {
+            top: 15%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-item:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-item:nth-child(3) {
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+
+        .floating-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .floating-emoji {
+            font-size: 1rem;
+        }
+
+        .floating-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .floating-subtitle {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Login Form */
+        .login-container {
+            width: 100%;
+            max-width: 28rem;
+            position: relative;
+            z-index: 20;
+        }
+
+        .login-card {
+            background: rgba(34, 39, 46, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-title {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+        }
+
+        .title-highlight {
+            color: var(--primary);
+        }
+
+        .login-subtitle {
+            color: var(--muted-foreground);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--foreground);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--foreground);
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--muted-foreground);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-input {
+            padding-right: 3rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--muted-foreground);
+            cursor: pointer;
+            padding: 0.25rem;
+            transition: color 0.2s;
+        }
+
+        .password-toggle:hover {
+            color: var(--foreground);
+        }
+
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .forgot-password {
+            font-size: 0.875rem;
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .forgot-password:hover {
+            opacity: 0.8;
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 3rem;
+            background: linear-gradient(135deg, var(--primary), hsl(217, 91%, 75%));
+            color: var(--primary-foreground);
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background-color: var(--border);
+        }
+
+        .divider-text {
+            padding: 0 1rem;
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .social-btn {
+            width: 100%;
+            height: 3rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--foreground);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .social-btn:hover {
+            background-color: var(--secondary);
+            border-color: var(--primary);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .signup-text {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .signup-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .signup-link a:hover {
+            opacity: 0.8;
+        }
+
+        .terms-text {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        .terms-text a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .terms-text a:hover {
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 640px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .login-card {
+                padding: 1.5rem;
+            }
+
+            .login-title {
+                font-size: 1.5rem;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Background Effects -->
+        <div class="bg-gradient-1"></div>
+        <div class="bg-gradient-2"></div>
+
+        <!-- Floating Elements -->
+        <div class="floating-elements">
+            <div class="floating-item">
+                <div class="floating-content">
+                    <span class="floating-emoji">🔐</span>
+                    <div>
+                        <div class="floating-title">Secure</div>
+                        <div class="floating-subtitle">Login</div>
+                    </div>
+                </div>
+            </div>
+            <div class="floating-item">
+                <div class="floating-content">
+                    <span class="floating-emoji">⚡</span>
+                    <div>
+                        <div class="floating-title">Fast</div>
+                        <div class="floating-subtitle">Access</div>
+                    </div>
+                </div>
+            </div>
+            <div class="floating-item">
+                <div class="floating-content">
+                    <span class="floating-emoji">🌐</span>
+                    <div>
+                        <div class="floating-title">Connected</div>
+                        <div class="floating-subtitle">Community</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="login-container">
+            <div class="login-card">
+                <!-- Header -->
+                <div class="login-header">
+                    <h1 class="login-title">
+                        Welcome <span class="title-highlight">Back</span>
+                    </h1>
+                    <p class="login-subtitle">Sign in to continue your dare journey</p>
+                </div>
+
+                <!-- Login Form -->
+                <form class="login-form" id="loginForm" method="POST" action="{% url 'login' %}">
+                     {% csrf_token %}
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="Enter your email"
+                            required
+                        />
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="password-container">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                class="form-input password-input" 
+                                placeholder="Enter your password"
+                                required
+                            />
+                            <button type="button" class="password-toggle" id="togglePassword">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form Options -->
+                    <div class="form-options">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="rememberMe" class="checkbox" />
+                            <label for="rememberMe" class="checkbox-label">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-btn">
+                        🚀 Sign In
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <span class="divider-text">or</span>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- Social Login -->
+                <div class="social-buttons">
+                    <button class="social-btn" onclick="handleGoogleLogin()">
+                        <span style="font-size: 1.125rem;">🌐</span>
+                        Continue with Google
+                    </button>
+                    <button class="social-btn" onclick="handleGithubLogin()">
+                        <span style="font-size: 1.125rem;">🔗</span>
+                        Continue with GitHub
+                    </button>
+                </div>
+
+                <!-- Signup Link -->
+                <div class="signup-link">
+                    <p class="signup-text">
+                        Don't have an account? 
+                        <a href="{% url 'register' %}">Create one now</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Terms -->
+            <div class="terms-text">
+                <p>
+                    By signing in, you agree to our 
+                    <a href="#">Terms of Service</a> and 
+                    <a href="#">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Password visibility toggle
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = this.querySelector('svg');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.innerHTML = `
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                `;
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                `;
+            }
+        });
+
+        // Social login handlers
+        function handleGoogleLogin() {
+            alert('Google login would be implemented here with OAuth');
+        }
+
+        function handleGithubLogin() {
+            alert('GitHub login would be implemented here with OAuth');
+        }
+    </script>
+
+{% endblock %}
             --secondary: hsl(222, 23%, 15%);
             --secondary-foreground: hsl(210, 40%, 98%);
             --muted: hsl(222, 23%, 15%);
@@ -529,7 +1046,7 @@
             </nav>
         </div>
         <div class="header-right">
-            <a href="#" class="btn btn-outline">Logout</a>
+            <!-- <a href="#" class="btn btn-outline">Logout</a> -->
             <a href="{% url 'register' %}" class="btn btn-primary">📱 Create Account</a>
         </div>
     </header>

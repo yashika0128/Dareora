@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard - Dareora</title>
-    <style>
+{% extends "base.html" %}
+
+{% block body %}
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -15,159 +12,24 @@
             --background: hsl(220, 23%, 7%);
             --foreground: hsl(210, 40%, 98%);
             --card: hsl(222, 23%, 11%);
-            --card-foreground: hsl(210, 40%, 98%);
             --primary: hsl(217, 91%, 60%);
             --primary-foreground: hsl(222.2, 47.4%, 11.2%);
             --secondary: hsl(222, 23%, 15%);
-            --secondary-foreground: hsl(210, 40%, 98%);
-            --muted: hsl(222, 23%, 15%);
             --muted-foreground: hsl(215.4, 16.3%, 56.9%);
             --border: hsl(222, 23%, 20%);
-            --radius: 0.75rem;
             --gold: hsl(45, 100%, 55%);
             --silver: hsl(0, 0%, 70%);
             --bronze: hsl(30, 100%, 60%);
             --green: hsl(142, 76%, 36%);
-            --orange: hsl(28, 100%, 56%);
             --purple: hsl(271, 81%, 56%);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background-color: var(--background);
             color: var(--foreground);
             line-height: 1.5;
             min-height: 100vh;
-        }
-
-        /* Header Styles */
-        .header {
-            background-color: var(--card);
-            border-bottom: 1px solid var(--border);
-            padding: 0 1rem;
-            height: 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            z-index: 100;
-        }
-
-        @media (min-width: 1024px) {
-            .header {
-                padding: 0 1.5rem;
-            }
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .logo-text {
-            padding: 0.5rem 0.75rem;
-            background: linear-gradient(135deg, var(--primary), hsl(217, 91%, 75%));
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-foreground);
-            font-weight: bold;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        }
-
-        .nav {
-            display: none;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        @media (min-width: 1024px) {
-            .nav {
-                display: flex;
-            }
-        }
-
-        .nav a {
-            color: var(--foreground);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav a:hover, .nav a.active {
-            color: var(--primary);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            white-space: nowrap;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            padding: 0.5rem 0.75rem;
-            height: 2.25rem;
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--foreground);
-            border: 2px solid var(--border);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--secondary);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), hsl(217, 91%, 75%));
-            color: var(--primary-foreground);
-            border: none;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-primary:hover {
-            opacity: 0.9;
-        }
-
-        /* Background Effects */
-        .bg-gradient-1 {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-            opacity: 0.5;
-        }
-
-        .bg-gradient-2 {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), 
-                        radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
-            opacity: 0.3;
         }
 
         /* Main Content */
@@ -177,21 +39,8 @@
             padding: 2rem 1rem;
         }
 
-        @media (min-width: 768px) {
-            .main-content {
-                padding: 3rem 1.5rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .main-content {
-                padding: 3rem 2rem;
-            }
-        }
-
         .container {
             position: relative;
-            z-index: 20;
             max-width: 80rem;
             margin: 0 auto;
         }
@@ -207,23 +56,10 @@
             font-weight: bold;
             color: var(--foreground);
             margin-bottom: 1rem;
-            line-height: 1.1;
-        }
-
-        @media (min-width: 768px) {
-            .page-title {
-                font-size: 3rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .page-title {
-                font-size: 3.5rem;
-            }
         }
 
         .title-highlight {
-            background: linear-gradient(135deg, var(--gold), var(--orange));
+            background: linear-gradient(135deg, var(--gold), hsl(28, 100%, 56%));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -234,7 +70,6 @@
             color: var(--muted-foreground);
             max-width: 40rem;
             margin: 0 auto;
-            line-height: 1.6;
         }
 
         /* Period Tabs */
@@ -247,7 +82,6 @@
         .tabs-container {
             display: flex;
             background: rgba(34, 39, 46, 0.5);
-            backdrop-filter: blur(12px);
             border: 1px solid var(--border);
             border-radius: 0.75rem;
             padding: 0.25rem;
@@ -259,12 +93,12 @@
             border-radius: 0.5rem;
             font-size: 0.875rem;
             font-weight: 600;
-            transition: all 0.2s;
             background: none;
             border: none;
             cursor: pointer;
             color: var(--muted-foreground);
-            white-space: nowrap;
+            text-decoration: none;
+            transition: all 0.2s;
         }
 
         .tab-btn:hover {
@@ -278,6 +112,52 @@
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
 
+        /* User Position Card */
+        .user-position {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .position-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 1rem;
+        }
+
+        .position-rank {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .position-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .position-stat {
+            text-align: center;
+        }
+
+        .position-stat-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--foreground);
+        }
+
+        .position-stat-label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
         /* Top 3 Podium */
         .podium-section {
             margin-bottom: 3rem;
@@ -287,15 +167,9 @@
             display: flex;
             justify-content: center;
             align-items: end;
-            gap: 1rem;
+            gap: 2rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
-        }
-
-        @media (min-width: 768px) {
-            .podium-container {
-                gap: 2rem;
-            }
         }
 
         .podium-user {
@@ -354,17 +228,9 @@
             color: white;
         }
 
-        .first-place .podium-rank {
-            background: var(--gold);
-        }
-
-        .second-place .podium-rank {
-            background: var(--silver);
-        }
-
-        .third-place .podium-rank {
-            background: var(--bronze);
-        }
+        .first-place .podium-rank { background: var(--gold); }
+        .second-place .podium-rank { background: var(--silver); }
+        .third-place .podium-rank { background: var(--bronze); }
 
         .podium-name {
             font-size: 1.125rem;
@@ -419,7 +285,6 @@
 
         .leaderboard-card {
             background: rgba(34, 39, 46, 0.9);
-            backdrop-filter: blur(12px);
             border: 1px solid var(--border);
             border-radius: 1rem;
             overflow: hidden;
@@ -468,10 +333,6 @@
 
         .leaderboard-rank.top-10 {
             color: var(--gold);
-        }
-
-        .leaderboard-rank.top-50 {
-            color: var(--primary);
         }
 
         .leaderboard-avatar {
@@ -558,7 +419,6 @@
 
         .category-leaderboard {
             background: rgba(34, 39, 46, 0.9);
-            backdrop-filter: blur(12px);
             border: 1px solid var(--border);
             border-radius: 1rem;
             padding: 1.5rem;
@@ -651,61 +511,6 @@
             color: var(--primary);
         }
 
-        /* User Position Card */
-        .user-position {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .position-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--foreground);
-            margin-bottom: 1rem;
-        }
-
-        .position-rank {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .position-stats {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .position-stat {
-            text-align: center;
-        }
-
-        .position-stat-value {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: var(--foreground);
-        }
-
-        .position-stat-label {
-            font-size: 0.875rem;
-            color: var(--muted-foreground);
-        }
-
-        /* Icons */
-        .icon {
-            width: 1rem;
-            height: 1rem;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-        }
-
         /* Mobile Responsiveness */
         @media (max-width: 640px) {
             .page-title {
@@ -721,10 +526,6 @@
                 padding: 0.75rem 1rem;
             }
 
-            .leaderboard-stats {
-                gap: 0.5rem;
-            }
-
             .tabs-container {
                 flex-wrap: wrap;
             }
@@ -734,335 +535,224 @@
                 font-size: 0.8rem;
             }
         }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-left">
-            <a href="index.html" class="logo">
-                <div class="logo-text">Dareora</div>
-            </a>
-            <nav class="nav">
-                <a href="#">Home</a>
-                <a href="{% url 'postdare' %}" >Post Dare</a>
-                <a href="{% url 'profile' %}" onclick="goToPage('profile')">Profile</a>
-                <a href="{% url 'explore' %}">Challenges</a>
-                <a href="{% url 'community' %}">Community</a>
-                <a href="{% url 'leaderboard' %}">Leaderboard</a>
-            </nav>
+</style>
+
+<!-- Main Content -->
+<main class="main-content">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <span class="title-highlight">Champions</span> Leaderboard
+            </h1>
+            <p class="page-subtitle">
+                Celebrate the boldest daredevils in our community. Climb the ranks and claim your throne!
+            </p>
         </div>
-        <div class="header-right">
-            <a href="#" class="btn btn-outline">Login</a>
-            <a href="#" class="btn btn-primary" onclick="goToPage('post-dare')">✨ Post Dare</a>
+
+        <!-- Period Tabs -->
+        <div class="period-tabs">
+            <div class="tabs-container">
+                <a href="?period=weekly" class="tab-btn {% if current_period == 'weekly' %}active{% endif %}">This Week</a>
+                <a href="?period=monthly" class="tab-btn {% if current_period == 'monthly' %}active{% endif %}">This Month</a>
+                <a href="?period=alltime" class="tab-btn {% if current_period == 'alltime' %}active{% endif %}">All Time</a>
+            </div>
         </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Background Effects -->
-        <div class="bg-gradient-1"></div>
-        <div class="bg-gradient-2"></div>
-
-        <div class="container">
-            <!-- Page Header -->
-            <div class="page-header">
-                <h1 class="page-title">
-                    <span class="title-highlight">Champions</span> Leaderboard
-                </h1>
-                <p class="page-subtitle">
-                    Celebrate the boldest daredevils in our community. Climb the ranks and claim your throne!
-                </p>
-            </div>
-
-            <!-- Period Tabs -->
-            <div class="period-tabs">
-                <div class="tabs-container">
-                    <button class="tab-btn active" onclick="switchPeriod('weekly')">This Week</button>
-                    <button class="tab-btn" onclick="switchPeriod('monthly')">This Month</button>
-                    <button class="tab-btn" onclick="switchPeriod('alltime')">All Time</button>
+        <!-- User Position -->
+        <div class="user-position">
+            <h3 class="position-title">Your Current Position</h3>
+            <div class="position-rank">#{{ current_user_data.position }}</div>
+            <div class="position-stats">
+                <div class="position-stat">
+                    <div class="position-stat-value">{{ current_user_data.total_points|default:"0" }}</div>
+                    <div class="position-stat-label">Points</div>
                 </div>
-            </div>
-
-            <!-- User Position -->
-            <div class="user-position">
-                <h3 class="position-title">Your Current Position</h3>
-                <div class="position-rank">#47</div>
-                <div class="position-stats">
-                    <div class="position-stat">
-                        <div class="position-stat-value">2,840</div>
-                        <div class="position-stat-label">Points</div>
-                    </div>
-                    <div class="position-stat">
-                        <div class="position-stat-value">47</div>
-                        <div class="position-stat-label">Completed</div>
-                    </div>
-                    <div class="position-stat">
-                        <div class="position-stat-value">87%</div>
-                        <div class="position-stat-label">Success Rate</div>
-                    </div>
+                <div class="position-stat">
+                    <div class="position-stat-value">{{ current_user_data.total_dares|default:"0" }}</div>
+                    <div class="position-stat-label">Completed</div>
                 </div>
-            </div>
-
-            <!-- Top 3 Podium -->
-            <div class="podium-section">
-                <div class="podium-container">
-                    <!-- Second Place -->
-                    <div class="podium-user second-place">
-                        <div class="podium-avatar">
-                            M
-                            <div class="podium-rank">2</div>
-                        </div>
-                        <div class="podium-name">Maya Storm</div>
-                        <div class="podium-points">8,450 points</div>
-                        <div class="podium-badge">
-                            🥈 Silver Champion
-                        </div>
-                    </div>
-
-                    <!-- First Place -->
-                    <div class="podium-user first-place">
-                        <div class="podium-avatar">
-                            A
-                            <div class="podium-rank">1</div>
-                        </div>
-                        <div class="podium-name">Alex Thunder</div>
-                        <div class="podium-points">12,340 points</div>
-                        <div class="podium-badge">
-                            👑 Gold Champion
-                        </div>
-                    </div>
-
-                    <!-- Third Place -->
-                    <div class="podium-user third-place">
-                        <div class="podium-avatar">
-                            J
-                            <div class="podium-rank">3</div>
-                        </div>
-                        <div class="podium-name">Jake Blaze</div>
-                        <div class="podium-points">7,890 points</div>
-                        <div class="podium-badge">
-                            🥉 Bronze Champion
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Leaderboard -->
-            <div class="leaderboard-section">
-                <div class="leaderboard-card">
-                    <div class="leaderboard-header">
-                        <h2 class="header-title">Global Rankings</h2>
-                    </div>
-                    <div class="leaderboard-list" id="leaderboard-list">
-                        <!-- Leaderboard items will be populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Category Leaderboards -->
-            <div class="categories-section">
-                <h2 class="section-title">Category Champions</h2>
-                <div class="categories-grid">
-                    <!-- Adventure Category -->
-                    <div class="category-leaderboard adventure-category">
-                        <div class="category-header">
-                            <div class="category-icon">🌍</div>
-                            <h3 class="category-title">Adventure</h3>
-                        </div>
-                        <div class="category-list">
-                            <div class="category-item">
-                                <div class="category-rank">1</div>
-                                <div class="category-avatar">S</div>
-                                <div class="category-name">Sarah Quest</div>
-                                <div class="category-points">3,240</div>
-                            </div>
-                            <div class="category-item">
-                                <div class="category-rank">2</div>
-                                <div class="category-avatar">D</div>
-                                <div class="category-name">David Explorer</div>
-                                <div class="category-points">2,890</div>
-                            </div>
-                            <div class="category-item">
-                                <div class="category-rank">3</div>
-                                <div class="category-avatar">L</div>
-                                <div class="category-name">Luna Wild</div>
-                                <div class="category-points">2,650</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Fitness Category -->
-                    <div class="category-leaderboard fitness-category">
-                        <div class="category-header">
-                            <div class="category-icon">💪</div>
-                            <h3 class="category-title">Fitness</h3>
-                        </div>
-                        <div class="category-list">
-                            <div class="category-item">
-                                <div class="category-rank">1</div>
-                                <div class="category-avatar">M</div>
-                                <div class="category-name">Mike Power</div>
-                                <div class="category-points">4,120</div>
-                            </div>
-                            <div class="category-item">
-                                <div class="category-rank">2</div>
-                                <div class="category-avatar">E</div>
-                                <div class="category-name">Emma Fit</div>
-                                <div class="category-points">3,780</div>
-                            </div>
-                            <div class="category-item">
-                                <div class="category-rank">3</div>
-                                <div class="category-avatar">R</div>
-                                <div class="category-name">Ryan Strong</div>
-                                <div class="category-points">3,450</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Creative Category -->
-                    <div class="category-leaderboard creative-category">
-                        <div class="category-header">
-                            <div class="category-icon">🎨</div>
-                            <h3 class="category-title">Creative</h3>
-                        </div>
-                        <div class="category-list">
-                            <div class="category-item">
-                                <div class="category-rank">1</div>
-                                <div class="category-avatar">A</div>
-                                <div class="category-name">Aria Artist</div>
-                                <div class="category-points">3,890</div>
-                            </div>
-                            <div class="category-item">
-                                <div class="category-rank">2</div>
-                                <div class="category-avatar">Z</div>
-                                <div class="category-name">Zoe Creative</div>
-                                <div class="category-points">3,560</div>
-                            </div>
-                            <div class="category-item">
-                                <div class="category-rank">3</div>
-                                <div class="category-avatar">B</div>
-                                <div class="category-name">Ben Maker</div>
-                                <div class="category-points">3,230</div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="position-stat">
+                    <div class="position-stat-value">{{ current_user_data.success_rate|default:"0" }}%</div>
+                    <div class="position-stat-label">Success Rate</div>
                 </div>
             </div>
         </div>
-    </main>
 
-    <script>
-        // Leaderboard data
-        const leaderboardData = [
-            { rank: 4, name: "Sophie Lightning", username: "@sophie_lightning", points: 6890, dares: 89, wins: 76, avatar: "S" },
-            { rank: 5, name: "Chris Extreme", username: "@chris_extreme", points: 6240, dares: 72, wins: 65, avatar: "C" },
-            { rank: 6, name: "Nina Fearless", username: "@nina_fearless", points: 5980, dares: 68, wins: 61, avatar: "N" },
-            { rank: 7, name: "Tyler Bold", username: "@tyler_bold", points: 5720, dares: 65, wins: 58, avatar: "T" },
-            { rank: 8, name: "Luna Daredevil", username: "@luna_daredevil", points: 5560, dares: 63, wins: 55, avatar: "L" },
-            { rank: 9, name: "Mason Warrior", username: "@mason_warrior", points: 5340, dares: 61, wins: 52, avatar: "M" },
-            { rank: 10, name: "Zara Champion", username: "@zara_champion", points: 5120, dares: 58, wins: 49, avatar: "Z" },
-            { rank: 11, name: "Diego Brave", username: "@diego_brave", points: 4890, dares: 55, wins: 46, avatar: "D" },
-            { rank: 12, name: "Ava Unstoppable", username: "@ava_unstoppable", points: 4670, dares: 52, wins: 43, avatar: "A" },
-            { rank: 13, name: "Ryan Challenger", username: "@ryan_challenger", points: 4450, dares: 49, wins: 40, avatar: "R" },
-            { rank: 14, name: "Mia Adventurer", username: "@mia_adventurer", points: 4230, dares: 47, wins: 38, avatar: "M" },
-            { rank: 15, name: "Ethan Legend", username: "@ethan_legend", points: 4010, dares: 45, wins: 36, avatar: "E" }
-        ];
-
-        let currentPeriod = 'weekly';
-
-        // Render leaderboard
-        function renderLeaderboard() {
-            const leaderboardList = document.getElementById('leaderboard-list');
-            leaderboardList.innerHTML = '';
-
-            leaderboardData.forEach(user => {
-                const item = document.createElement('div');
-                item.className = 'leaderboard-item';
-                
-                const rankClass = user.rank <= 10 ? 'top-10' : user.rank <= 50 ? 'top-50' : '';
-                
-                item.innerHTML = `
-                    <div class="leaderboard-rank ${rankClass}">#${user.rank}</div>
-                    <div class="leaderboard-avatar">${user.avatar}</div>
-                    <div class="leaderboard-info">
-                        <div class="leaderboard-name">${user.name}</div>
-                        <div class="leaderboard-username">${user.username}</div>
+        <!-- Top 3 Podium -->
+        {% if top_3_users %}
+        <div class="podium-section">
+            <div class="podium-container">
+                <!-- Second Place -->
+                {% if top_3_users|length >= 2 %}
+                <div class="podium-user second-place">
+                    <div class="podium-avatar">
+                        {{ top_3_users.1.avatar_letter }}
+                        <div class="podium-rank">2</div>
                     </div>
-                    <div class="leaderboard-stats">
-                        <div class="stat-item">
-                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <circle cx="12" cy="12" r="6"/>
-                                <circle cx="12" cy="12" r="2"/>
-                            </svg>
-                            <span class="stat-value">${user.dares}</span>
+                    <div class="podium-name">{{ top_3_users.1.name }}</div>
+                    <div class="podium-points">{{ top_3_users.1.points }} points</div>
+                    <div class="podium-badge">
+                        🥈 Silver Champion
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- First Place -->
+                {% if top_3_users|length >= 1 %}
+                <div class="podium-user first-place">
+                    <div class="podium-avatar">
+                        {{ top_3_users.0.avatar_letter }}
+                        <div class="podium-rank">1</div>
+                    </div>
+                    <div class="podium-name">{{ top_3_users.0.name }}</div>
+                    <div class="podium-points">{{ top_3_users.0.points }} points</div>
+                    <div class="podium-badge">
+                        👑 Gold Champion
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Third Place -->
+                {% if top_3_users|length >= 3 %}
+                <div class="podium-user third-place">
+                    <div class="podium-avatar">
+                        {{ top_3_users.2.avatar_letter }}
+                        <div class="podium-rank">3</div>
+                    </div>
+                    <div class="podium-name">{{ top_3_users.2.name }}</div>
+                    <div class="podium-points">{{ top_3_users.2.points }} points</div>
+                    <div class="podium-badge">
+                        🥉 Bronze Champion
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Main Leaderboard -->
+        <div class="leaderboard-section">
+            <div class="leaderboard-card">
+                <div class="leaderboard-header">
+                    <h2 class="header-title">Global Rankings</h2>
+                </div>
+                <div class="leaderboard-list">
+                    {% for user in remaining_users %}
+                    <div class="leaderboard-item">
+                        <div class="leaderboard-rank {% if user.rank <= 10 %}top-10{% endif %}">#{{ user.rank }}</div>
+                        <div class="leaderboard-avatar">{{ user.avatar_letter }}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">{{ user.name }}</div>
+                            <div class="leaderboard-username">{{ user.username }}</div>
                         </div>
-                        <div class="stat-item">
-                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                                <polyline points="22,4 12,14.01 9,11.01"/>
-                            </svg>
-                            <span class="stat-value">${user.wins}</span>
+                        <div class="leaderboard-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">{{ user.total_dares }}</span> Dares
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">{{ user.wins }}</span> Wins
+                            </div>
+                        </div>
+                        <div class="leaderboard-points">{{ user.points }}</div>
+                    </div>
+                    {% empty %}
+                    <div class="leaderboard-item">
+                        <div style="text-align: center; width: 100%; padding: 2rem; color: var(--muted-foreground);">
+                            No data available for this period. Start completing dares to appear on the leaderboard!
                         </div>
                     </div>
-                    <div class="leaderboard-points">${user.points.toLocaleString()}</div>
-                `;
-                
-                leaderboardList.appendChild(item);
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Leaderboards -->
+        <div class="categories-section">
+            <h2 class="section-title">Category Champions</h2>
+            <div class="categories-grid">
+                <!-- Adventure Category -->
+                {% if category_data.adventure %}
+                <div class="category-leaderboard adventure-category">
+                    <div class="category-header">
+                        <div class="category-icon">{{ category_data.adventure.icon }}</div>
+                        <h3 class="category-title">{{ category_data.adventure.name }}</h3>
+                    </div>
+                    <div class="category-list">
+                        {% for user in category_data.adventure.users %}
+                        <div class="category-item">
+                            <div class="category-rank">{{ forloop.counter }}</div>
+                            <div class="category-avatar">{{ user.avatar_letter }}</div>
+                            <div class="category-name">{{ user.name }}</div>
+                            <div class="category-points">{{ user.points }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Fitness Category -->
+                {% if category_data.fitness %}
+                <div class="category-leaderboard fitness-category">
+                    <div class="category-header">
+                        <div class="category-icon">{{ category_data.fitness.icon }}</div>
+                        <h3 class="category-title">{{ category_data.fitness.name }}</h3>
+                    </div>
+                    <div class="category-list">
+                        {% for user in category_data.fitness.users %}
+                        <div class="category-item">
+                            <div class="category-rank">{{ forloop.counter }}</div>
+                            <div class="category-avatar">{{ user.avatar_letter }}</div>
+                            <div class="category-name">{{ user.name }}</div>
+                            <div class="category-points">{{ user.points }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Creative Category -->
+                {% if category_data.creative %}
+                <div class="category-leaderboard creative-category">
+                    <div class="category-header">
+                        <div class="category-icon">{{ category_data.creative.icon }}</div>
+                        <h3 class="category-title">{{ category_data.creative.name }}</h3>
+                    </div>
+                    <div class="category-list">
+                        {% for user in category_data.creative.users %}
+                        <div class="category-item">
+                            <div class="category-rank">{{ forloop.counter }}</div>
+                            <div class="category-avatar">{{ user.avatar_letter }}</div>
+                            <div class="category-name">{{ user.name }}</div>
+                            <div class="category-points">{{ user.points }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Simple page interactions without JSON
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add hover effects to category cards
+        const categoryCards = document.querySelectorAll('.category-leaderboard');
+        categoryCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
             });
-        }
-
-        // Switch period
-        function switchPeriod(period) {
-            currentPeriod = period;
             
-            // Update tab states
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
             });
-            event.target.classList.add('active');
-            
-            // Simulate data refresh
-            console.log(`Switched to ${period} leaderboard`);
-            renderLeaderboard(); // In real app, this would fetch new data
-        }
-
-        // Navigation functions
-        function goToPage(page) {
-            switch(page) {
-                case 'post-dare':
-                    alert('Would navigate to Post Dare page');
-                    break;
-                case 'profile':
-                    window.open('profile.html', '_blank');
-                    break;
-                case 'community':
-                    alert('Would navigate to Community page');
-                    break;
-                default:
-                    alert(`Would navigate to ${page} page`);
-            }
-        }
-
-        // Enhanced interactions
-        document.addEventListener('DOMContentLoaded', function() {
-            renderLeaderboard();
-            
-            // Add hover effects
-            const cards = document.querySelectorAll('.category-leaderboard');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-8px)';
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
-
-            console.log('🏆 Dareora Leaderboard loaded successfully!');
         });
-    </script>
-</body>
-</html>
+
+        console.log('🏆 Dynamic Dareora Leaderboard loaded successfully!');
+        console.log('Current period: {{ current_period }}');
+        console.log('User position: #{{ current_user_data.position }}');
+    });
+</script>
+{% endblock %}

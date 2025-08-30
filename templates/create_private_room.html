@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block body %}
+<style>
+    .create-room-banner {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 1rem 1rem 0 0;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    }
+    .create-room-container {
+        max-width: 520px;
+        margin: 2.5rem auto;
+        background: rgba(34, 39, 46, 0.97);
+        border-radius: 1rem;
+        padding: 0 2.5rem 2.5rem 2.5rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        color: var(--foreground);
+        position: relative;
+    }
+    .create-room-header {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+    .create-room-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: white;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .create-room-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary);
+        margin-bottom: 0.2rem;
+    }
+    .create-room-desc {
+        color: var(--muted-foreground);
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    .create-room-label {
+        font-weight: 500;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    .create-room-input, .create-room-textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        background: var(--secondary);
+        color: var(--foreground);
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+    .create-room-btn {
+        background: var(--primary);
+        color: var(--primary-foreground);
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .create-room-btn:hover {
+        opacity: 0.9;
+    }
+    .create-room-members-preview {
+        display: flex;
+        gap: 0.7rem;
+        margin-bottom: 1rem;
+        margin-top: 0.5rem;
+    }
+    .create-room-member-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: var(--primary);
+        font-weight: 600;
+        border: 2px solid var(--primary);
+    }
+    .create-room-icon {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
+    }
+</style>
+<div class="create-room-container">
+    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=900&q=80" alt="Create Room Banner" class="create-room-banner">
+    <div class="create-room-header">
+        <div class="create-room-avatar">
+            <span>🏠</span>
+        </div>
+        <div>
+            <div class="create-room-title">Create a Private Room</div>
+            <div class="create-room-desc">Start a private group and challenge your friends with exclusive dares!</div>
+        </div>
+    </div>
+    <form method="post" id="create-room-form">
+        {% csrf_token %}
+        <label class="create-room-label"><span class="create-room-icon">🏷️</span>Room Name</label>
+        <input type="text" name="room_name" class="create-room-input" placeholder="Enter room name" required>
+        <label class="create-room-label"><span class="create-room-icon">👥</span>Add Members (comma-separated usernames)</label>
+        <input type="text" name="members" class="create-room-input" id="members-input" placeholder="e.g. alice, bob, charlie">
+        <div class="create-room-members-preview" id="members-preview"></div>
+        <button type="submit" class="create-room-btn">Create Room</button>
+    </form>
+</div>
+<script>
+// Live preview of member avatars from input
+const membersInput = document.getElementById('members-input');
+const membersPreview = document.getElementById('members-preview');
+if (membersInput && membersPreview) {
+    membersInput.addEventListener('input', function() {
+        const names = membersInput.value.split(',').map(s => s.trim()).filter(Boolean);
+        membersPreview.innerHTML = names.map(name => `<div class="create-room-member-avatar" title="${name}">${name.slice(0,2).toUpperCase()}</div>`).join('');
+    });
+}
+</script>
+{% endblock %}

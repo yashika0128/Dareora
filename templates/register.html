@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join the Adventure - One Community</title>
-    <style>
+{% extends "base.html" %}
+
+{% block body %}
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -588,28 +585,6 @@
             }
         }
     </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-left">
-            <a href="#" class="logo">
-                <div class="logo-icon">O</div>
-            </a>
-            <nav class="nav">
-                <a href="#">Home</a>
-                <a href="{% url 'postdare' %}" >Post Dare</a>
-                <a href="{% url 'profile' %}" onclick="goToPage('profile')">Profile</a>
-                <a href="{% url 'explore' %}">Challenges</a>
-                <a href="{% url 'community' %}">Community</a>
-                <a href="{% url 'leaderboard' %}">Leaderboard</a>
-            </nav>
-        </div>
-        <div class="header-right">
-            <a href="#" class="btn btn-outline">Login</a>
-            <a href="#" class="btn btn-primary">📱 Create Account</a>
-        </div>
-    </header>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -1123,5 +1098,4 @@
 
         console.log('🚀 Register page loaded successfully!');
     </script>
-</body>
-</html>
+{% endblock %}

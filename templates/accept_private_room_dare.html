@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block body %}
+<style>
+    .accept-container {
+        background-color: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 2rem;
+        margin: 2rem auto;
+        max-width: 600px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    }
+    .dare-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+    .dare-meta {
+        color: var(--muted-foreground);
+        text-align: center;
+        margin-bottom: 1.2rem;
+    }
+    .dare-desc {
+        color: var(--foreground);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .accept-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.8rem 2.2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+    }
+    .accept-btn:hover {
+        opacity: 0.9;
+    }
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 2rem;
+        color: var(--primary);
+        text-decoration: none;
+    }
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+<div class="accept-container">
+    <div class="dare-title">Group Dare: {{ dare.title }}</div>
+    <div class="dare-meta">Room: <b>{{ room.name }}</b> | Posted by <b>{{ dare.created_by.username }}</b></div>
+    <div class="dare-desc">{{ dare.description }}</div>
+    {% if user == dare.created_by %}
+        <div style="display: flex; gap: 0.5rem; justify-content: center; margin: 1.5rem 0;">
+            <a href="{% url 'edit_private_room_dare' room.uuid dare.id %}" class="btn btn-secondary" style="background-color: var(--border); color: var(--foreground); padding: 0.5rem 1.2rem; border-radius: 0.4rem; font-size: 0.95rem; text-decoration: none;">Edit</a>
+            <a href="{% url 'delete_private_room_dare' room.uuid dare.id %}" class="btn btn-secondary" style="background-color: #ef4444; color: white; padding: 0.5rem 1.2rem; border-radius: 0.4rem; font-size: 0.95rem; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this dare?');">Delete</a>
+        </div>
+        <div style="text-align:center; color:var(--muted-foreground); font-size:0.98rem;">You posted this dare. Only you can edit or delete it.</div>
+    {% else %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label class="accept-dare-label" style="font-weight:500; margin-top:1rem; margin-bottom:0.5rem; display:block;">Your Completion Notes</label>
+            <textarea name="completion_notes" class="accept-dare-textarea" rows="4" placeholder="Describe how you completed the dare..." required></textarea>
+            <label class="accept-dare-label" style="font-weight:500; margin-top:1rem; margin-bottom:0.5rem; display:block;">Upload Proof (Image/Video)</label>
+            <input type="file" name="proof_file" class="accept-dare-input" accept="image/*,video/*" required>
+            <button type="submit" class="accept-btn" style="margin-top:1rem;">Submit Completion</button>
+        </form>
+    {% endif %}
+    <a href="{% url 'private_room' room.uuid %}" class="back-link">← Back to Room</a>
+</div>
+{% endblock %}

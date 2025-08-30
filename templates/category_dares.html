@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block body %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --background: hsl(220, 23%, 7%);
+        --foreground: hsl(210, 40%, 98%);
+        --card: hsl(222, 23%, 11%);
+        --card-foreground: hsl(210, 40%, 98%);
+        --primary: hsl(217, 91%, 60%);
+        --secondary: hsl(222, 23%, 15%);
+        --muted: hsl(222, 23%, 15%);
+        --muted-foreground: hsl(215.4, 16.3%, 56.9%);
+        --border: hsl(222, 23%, 20%);
+        --radius: 0.75rem;
+        --orange: hsl(28, 100%, 56%);
+        --purple: hsl(271, 81%, 56%);
+        --success: #10b981;
+        --danger: #ef4444;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        background-color: var(--background);
+        color: var(--foreground);
+        line-height: 1.6;
+    }
+
+    .main-content {
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .header-content {
+        flex: 1;
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+    }
+
+    .breadcrumb a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .title-highlight {
+        color: var(--orange);
+    }
+
+    .page-subtitle {
+        color: var(--muted-foreground);
+        font-size: 1.125rem;
+    }
+
+    .create-btn {
+        background-color: var(--primary);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .create-btn:hover {
+        background-color: hsl(217, 91%, 50%);
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+
+    .challenges-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .challenge-card {
+        background-color: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .challenge-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--primary);
+    }
+
+    .challenge-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--foreground);
+        line-height: 1.4;
+    }
+
+    .challenge-description {
+        color: var(--muted-foreground);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .challenge-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+        background-color: var(--muted);
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .btn-primary {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: hsl(217, 91%, 50%);
+        text-decoration: none;
+    }
+
+    .btn-secondary {
+        background-color: var(--danger);
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: hsl(0, 84%, 50%);
+        text-decoration: none;
+    }
+
+    .no-challenges {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--muted-foreground);
+        grid-column: 1 / -1;
+    }
+
+    .no-challenges h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--foreground);
+    }
+
+    .no-challenges p {
+        font-size: 1.125rem;
+        margin-bottom: 2rem;
+    }
+
+    .no-challenges a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: var(--primary);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .no-challenges a:hover {
+        background-color: hsl(217, 91%, 50%);
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+
+    .messages {
+        margin-bottom: 2rem;
+    }
+
+    .message {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .message.success {
+        background-color: var(--success);
+        color: white;
+    }
+
+    .message.error {
+        background-color: var(--danger);
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .challenges-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card-actions {
+            justify-content: center;
+        }
+    }
+</style>
+
+<main class="main-content">
+    <div class="container">
+        <!-- Messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <div class="breadcrumb">
+                    <a href="{% url 'explore' %}">Home</a>
+                    <span>/</span>
+                    <span>{{ category|title }}</span>
+                </div>
+                <h1 class="page-title">{{ category|title }} <span class="title-highlight">Challenges</span></h1>
+                <p class="page-subtitle">Epic {{ category|lower }} challenges and thrilling experiences await.</p>
+            </div>
+            <a href="{% url 'postdare' %}" class="create-btn">
+                ➕ Create Challenge
+            </a>
+        </div>
+
+        <!-- Dares Grid -->
+        <div class="challenges-grid">
+            {% for dare in dares %}
+            <div class="challenge-card">
+                <h3 class="challenge-title">{{ dare.dare_title }}</h3>
+                <p class="challenge-description">{{ dare.description }}</p>
+
+                <div class="challenge-meta">
+                    {% if dare.time_limit %}
+                    <span class="meta-item">⏱ {{ dare.time_limit|date:"M d, Y H:i" }}</span>
+                    {% endif %}
+                    {% if dare.difficulty %}
+                    <span class="meta-item">🎯 {{ dare.difficulty }}</span>
+                    {% endif %}
+                    {% if dare.tags %}
+                    <span class="meta-item">🏷️ {{ dare.tags }}</span>
+                    {% endif %}
+                    <span class="meta-item">📂 {{ dare.category|title }}</span>
+                </div>
+
+                <div class="card-actions">
+                    {% if dare.user == request.user %}
+                        <a href="{% url 'edit_dare' dare.id %}" class="btn-primary">✏️ Edit</a>
+                        <a href="{% url 'delete_dare' dare.id %}" class="btn-secondary" 
+                           onclick="return confirm('Are you sure you want to delete this challenge?')">🗑 Delete</a>
+                    {% else %}
+                        <a href="{% url 'accept_dare' dare.id %}" class="btn-primary">🎯 Join Dare</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-challenges">
+                <h3>No Challenges Found</h3>
+                <p>No challenges found in the <strong>{{ category|title }}</strong> category.</p>
+                <p>Be the first to create one!</p>
+                <a href="{% url 'postdare' %}">
+                    ➕ Create First Challenge
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth animations to challenge cards
+    const cards = document.querySelectorAll('.challenge-card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+});
+</script>
+
+{% endblock %}
